@@ -15,38 +15,60 @@ const MovieDetails = () => {
   const data = location.state?.data;
 
   const boxStyle = {
-    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9)), url(${IMAGE_BASE_URL}${data.backdrop_path})`,
+    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0 ,55%), rgba(0, 0, 0, 0.9)), url(${IMAGE_BASE_URL}${data.backdrop_path})`,
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "top",
     width: "100%",
-    height: "90vh",
-    position: "relative",
-    marginTop: "20px",
+    minHeight: "100vh",
+    display: "grid",
+    placeItems: "center",
+    backgroundBlendMode: "darken",
+    backgroundAttachment: "fixed",
   };
 
   const posterStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "20%",
-    transform: "translate(-50%, -50%)",
+    display: "block",
     width: "350px",
     height: "auto",
+    margin: "auto",
     borderRadius: "20px",
     cursor: "pointer",
   };
 
   return (
     <Box style={boxStyle}>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          flexDirection: { lg: "row", xs: "column" },
+          padding: "2%",
+        }}
+      >
         <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
-          <img
-            src={`${IMAGE_BASE_URL}${data.poster_path}`}
-            alt="poster"
-            style={posterStyle}
-          />
+          <Box
+            sx={{
+              "@media screen and (min-width: 900px)": {
+                width: "100%",
+              },
+            }}
+          >
+            <img
+              src={`${IMAGE_BASE_URL}${data.poster_path}`}
+              alt="poster"
+              style={posterStyle}
+            />
+          </Box>
         </Grid>
         <Grid item xl={8} lg={8} md={8} sm={12} xs={12}>
-          <Box sx={{ padding: "100px", color: "#fff" }}>
+          <Box
+            sx={{
+              width: "95%",
+              margin: "2% auto",
+              color: "#fff",
+              padding: "2%",
+            }}
+          >
             <Typography
               variant="h4"
               style={{

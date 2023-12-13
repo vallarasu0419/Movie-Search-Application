@@ -1,3 +1,5 @@
+import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -7,26 +9,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import { styled } from "@mui/system";
 import bgImg from "../Assets/movie.jpg";
 import { useNavigate } from "react-router-dom";
+
+const CustomTextField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "40px",
+  },
+});
 
 function MovieList() {
   const API_KEY = "80f5dfd6a54f5ac300eba1c8ca1bc325";
   const API_URL = "https://api.themoviedb.org/3";
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-
+  const moviesPerPage = 6;
+  const navigate = useNavigate();
   const [movieList, setMovieList] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const moviesPerPage = 6;
-  const navigate = useNavigate();
-  const handleNavigate = (movie) => {
-    navigate("/movieDetails", {
-      state: { data: movie },
-    });
-  };
+
   const getMovieList = async () => {
     try {
       const response = await axios.get(`${API_URL}/trending/movie/day`, {
@@ -35,7 +37,6 @@ function MovieList() {
           language: "en-US",
         },
       });
-
       setMovieList(response.data.results);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -49,31 +50,21 @@ function MovieList() {
   const indexOfLastMovie = currentPage * moviesPerPage;
   const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
   const currentMovies = movieList.slice(indexOfFirstMovie, indexOfLastMovie);
+
   const filterData = useMemo(() => {
+    const lowerCaseSearch = searchText.toLowerCase();
     return currentMovies.filter(
       (item) =>
-        item.title
-          .toString()
-          .toLowerCase()
-          .includes(searchText.toLowerCase()) ||
-        item.overview
-          .toString()
-          .toLowerCase()
-          .includes(searchText.toLowerCase())
+        item.title.toLowerCase().includes(lowerCaseSearch) ||
+        item.overview.toLowerCase().includes(lowerCaseSearch)
     );
   }, [searchText, currentMovies]);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleNavigate = (movie) => {
+    navigate("/movieDetails", { state: { data: movie } });
+  };
 
   const [hoveredMovie, setHoveredMovie] = useState(null);
-
-  const handleMouseEnter = (movie) => {
-    setHoveredMovie(movie);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredMovie(null);
-  };
 
   return (
     <Container>
@@ -84,7 +75,7 @@ function MovieList() {
           style={{ width: "100%", height: "400px" }}
         />
         <Box sx={{ position: "absolute", bottom: 30, left: 0, width: "100%" }}>
-          <TextField
+          <CustomTextField
             fullWidth
             style={{ backgroundColor: "#fff", borderRadius: "50px" }}
             onChange={(e) => setSearchText(e.target.value)}
@@ -95,8 +86,8 @@ function MovieList() {
         {filterData.map((movie) => (
           <Grid item xl={4} lg={4} md={4} sm={6} xs={12} key={movie.id}>
             <Card
-              onMouseEnter={() => handleMouseEnter(movie)}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={() => setHoveredMovie(movie)}
+              onMouseLeave={() => setHoveredMovie(null)}
               onClick={() => handleNavigate(movie)}
               style={{ width: "100%", height: "99%", cursor: "pointer" }}
             >
@@ -104,16 +95,11 @@ function MovieList() {
                 <img
                   src={`${IMAGE_BASE_URL}${movie.poster_path}`}
                   alt="image"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-
                 {hoveredMovie && hoveredMovie.id === movie.id && (
                   <div
-                    className="slide-in-bottom "
+                    className="slide-in-bottom"
                     style={{
                       position: "absolute",
                       bottom: 0,
@@ -123,10 +109,6 @@ function MovieList() {
                       backgroundColor: "rgba(0, 0, 0, 0.7)",
                       color: "white",
                       backdropFilter: "blur(5px)",
-                      //   transform: hoveredMovie
-                      //     ? "translateY(0%)"
-                      //     : "translateY(100%)",
-                      //   transition: "transform 0.8s ease-in-out",
                     }}
                   >
                     <Typography variant="h5" style={{ color: "#18bbe6" }}>
@@ -146,19 +128,16 @@ function MovieList() {
         {Array.from({
           length: Math.ceil(movieList.length / moviesPerPage),
         }).map((_, index) => (
-          <>
-            <Button
-              variant="outlined"
-              key={index}
-              className={`btn ${
-                currentPage === index + 1 ? "btn-primary" : "btn-secondary"
-              }`}
-              onClick={() => paginate(index + 1)}
-            >
-              {index + 1}
-            </Button>
-            &nbsp; &nbsp;
-          </>
+          <Button
+            variant="outlined"
+            key={index}
+            className={`btn ${
+              currentPage === index + 1 ? "btn-primary" : "btn-secondary"
+            }`}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </Button>
         ))}
       </div>
     </Container>
