@@ -64,15 +64,13 @@ function MovieList() {
     navigate("/movieDetails", { state: { data: movie } });
   };
 
-  const [hoveredMovie, setHoveredMovie] = useState(null);
-
   return (
     <Container>
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position: "relative", overflow: "hidden" }}>
         <img
           src={bgImg}
-          alt="image"
-          style={{ width: "100%", height: "400px" }}
+          alt=""
+          style={{ width: "100%", height: "400px", marginTop: "-100px" }}
         />
         <Box sx={{ position: "absolute", bottom: 30, left: 0, width: "100%" }}>
           <CustomTextField
@@ -86,38 +84,37 @@ function MovieList() {
         {filterData.map((movie) => (
           <Grid item xl={4} lg={4} md={4} sm={6} xs={12} key={movie.id}>
             <Card
-              onMouseEnter={() => setHoveredMovie(movie)}
-              onMouseLeave={() => setHoveredMovie(null)}
               onClick={() => handleNavigate(movie)}
               style={{ width: "100%", height: "99%", cursor: "pointer" }}
+              className="movie-card"
             >
               <div style={{ position: "relative" }}>
                 <img
                   src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                  alt="image"
+                  alt=""
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-                {hoveredMovie && hoveredMovie.id === movie.id && (
-                  <div
-                    className="slide-in-bottom"
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      width: "100%",
-                      padding: "10px",
-                      backgroundColor: "rgba(0, 0, 0, 0.7)",
-                      color: "white",
-                      backdropFilter: "blur(5px)",
-                    }}
-                  >
-                    <Typography variant="h5" style={{ color: "#18bbe6" }}>
-                      {movie.title}
-                    </Typography>
-                    <br />
-                    <Typography>{movie.overview}</Typography>
-                  </div>
-                )}
+
+                <div
+                  className="slide-in-bottom"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "auto",
+                    padding: "10px",
+                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    color: "white",
+                    backdropFilter: "blur(5px)",
+                  }}
+                >
+                  <Typography variant="h5" style={{ color: "#18bbe6" }}>
+                    {movie.title}
+                  </Typography>
+                  <br />
+                  <Typography>{movie.overview}</Typography>
+                </div>
               </div>
             </Card>
           </Grid>
