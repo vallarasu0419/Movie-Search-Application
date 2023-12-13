@@ -35,16 +35,14 @@
 }
 
 .slide-in-bottom {
-  display: none;
-  width: "100%";
-  height: auto;
+  visibility: hidden;
 }
 
 .movie-card:hover .slide-in-bottom {
-  display: block;
+  visibility: visible;
   animation-name: slide-in-bottom;
   animation-duration: 1s;
-  animation-timing-function: ease;
+  animation-timing-function: ease-in-out;
 
 
 }
@@ -54,7 +52,7 @@
   0% {
     -webkit-transform: translateY(10%);
     transform: translateY(10%);
-    opacity: .75;
+
 
   }
 
@@ -62,6 +60,6 @@
   100% {
     -webkit-transform: translateY(0);
     transform: translateY(0%);
-    opacity: 1;
+
   }
 }

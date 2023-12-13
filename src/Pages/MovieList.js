@@ -98,22 +98,28 @@ function MovieList() {
                 <div
                   className="slide-in-bottom"
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
                     width: "100%",
-                    height: "auto",
-                    padding: "10px",
+                    position: "absolute",
+                    bottom: "0",
                     backgroundColor: "rgba(0, 0, 0, 0.7)",
                     color: "white",
                     backdropFilter: "blur(5px)",
+                    minHeight: "35%",
                   }}
                 >
-                  <Typography variant="h5" style={{ color: "#18bbe6" }}>
+                  <Typography
+                    variant="h5"
+                    style={{
+                      color: "#18bbe6",
+                      padding: "1%",
+                    }}
+                  >
                     {movie.title}
                   </Typography>
                   <br />
-                  <Typography>{movie.overview}</Typography>
+                  <Typography sx={{ padding: "1%" }}>
+                    {movie.overview}
+                  </Typography>
                 </div>
               </div>
             </Card>
