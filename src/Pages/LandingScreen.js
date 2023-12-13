@@ -2,7 +2,6 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import TopNavbar from "./TopNavbar";
 import Footer from "./Footer";
-import MovieList from "./MovieList";
 
 function LandingScreen() {
   return (

@@ -1,14 +1,19 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
 import React from "react";
-import { useLocation } from "react-router-dom";
-import LanguageIcon from "@mui/icons-material/Language";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
+import ListIcon from "@mui/icons-material/List";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import AdjustIcon from "@mui/icons-material/Adjust";
+import { useLocation } from "react-router-dom";
 
-function MovieDetails() {
-  const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+const MovieDetails = () => {
   const location = useLocation();
   const data = location.state?.data;
-  console.log(data);
+
   const boxStyle = {
     backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9)), url(${IMAGE_BASE_URL}${data.backdrop_path})`,
     backgroundSize: "cover",
@@ -47,7 +52,6 @@ function MovieDetails() {
               style={{
                 fontWeight: "600",
                 wordSpacing: "10px",
-                lineHeight: 2,
               }}
             >
               {data.title}
@@ -57,6 +61,54 @@ function MovieDetails() {
               <AdjustIcon /> {data.original_language} &nbsp; &nbsp;
               <AdjustIcon /> Drama, Mystery, Thriller, Science Fiction
             </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              {["List", "Favorite", "Bookmark", "Star"].map((icon, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: "50px",
+                    height: "50px",
+                    backgroundColor: "#032541",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <IconButton>
+                    {icon === "List" && <ListIcon sx={{ color: "#fff" }} />}
+                    {icon === "Favorite" && (
+                      <FavoriteBorderIcon sx={{ color: "#fff" }} />
+                    )}
+                    {icon === "Bookmark" && (
+                      <BookmarkBorderIcon sx={{ color: "#fff" }} />
+                    )}
+                    {icon === "Star" && (
+                      <StarBorderIcon sx={{ color: "#fff" }} />
+                    )}
+                  </IconButton>
+                </Box>
+              ))}
+              <Box>
+                <IconButton>
+                  <PlayCircleOutlineIcon
+                    sx={{ color: "#fff", fontSize: "35px" }}
+                  />
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontWeight: "600",
+                      paddingLeft: "7px",
+                    }}
+                  >
+                    Play Trailer
+                  </Typography>
+                </IconButton>
+              </Box>
+            </Box>
+
             <Typography
               variant="h5"
               style={{ fontWeight: "700", lineHeight: 2 }}
@@ -69,6 +121,6 @@ function MovieDetails() {
       </Grid>
     </Box>
   );
-}
+};
 
 export default MovieDetails;
